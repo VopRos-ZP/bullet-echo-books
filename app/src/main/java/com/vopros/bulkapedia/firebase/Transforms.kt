@@ -6,6 +6,8 @@ import com.vopros.bulkapedia.category.Category
 import com.vopros.bulkapedia.category.CategoryDTO
 import com.vopros.bulkapedia.comment.Comment
 import com.vopros.bulkapedia.comment.CommentDTO
+import com.vopros.bulkapedia.gears.Gear
+import com.vopros.bulkapedia.gears.GearDTO
 import com.vopros.bulkapedia.hero.Hero
 import com.vopros.bulkapedia.hero.HeroDTO
 import com.vopros.bulkapedia.map.GameMap
@@ -48,4 +50,8 @@ fun toUser(doc: DocumentSnapshot): User? = toObject(UserDTO::class.java, doc) {
 
 fun toComment(doc: DocumentSnapshot): Comment? = toObject(CommentDTO::class.java, doc) {
     Comment(it.id, it.author, it.set, it.text, it.date)
+}
+
+fun toGear(doc: DocumentSnapshot): Gear? = toObject(GearDTO::class.java, doc) {
+    Gear(it.id, it.gearCell, it.gearSet, it.image)
 }
