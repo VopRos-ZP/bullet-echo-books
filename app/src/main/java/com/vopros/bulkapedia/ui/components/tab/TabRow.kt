@@ -11,7 +11,6 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Tab
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
@@ -19,12 +18,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import kotlinx.coroutines.launch
-import com.vopros.bulkapedia.R
 import com.vopros.bulkapedia.ui.components.CustomIndicator
 import com.vopros.bulkapedia.ui.components.HCenterBox
+import com.vopros.bulkapedia.ui.components.ListContent
 import com.vopros.bulkapedia.ui.components.Text
 import com.vopros.bulkapedia.ui.theme.BulkaPediaTheme
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -40,7 +39,6 @@ fun <T> TabRowWithPager(
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
         Card(
-            modifier = Modifier.padding(horizontal = 20.dp),
             elevation = 0.dp,
             shape = RoundedCornerShape(15.dp),
             backgroundColor = BulkaPediaTheme.colors.primaryDark,
@@ -68,16 +66,12 @@ fun <T> TabRowWithPager(
                 }
             }
         }
-        when (content) {
-            null -> HCenterBox(modifier = Modifier
-                .padding(horizontal = 40.dp)
+        ListContent(items = content, sizing = {
+            HCenterBox(modifier = Modifier
+                .padding(horizontal = 20.dp)
                 .background(BulkaPediaTheme.colors.primary, RoundedCornerShape(15.dp))
-                .height((25 * 2 + 75 * 3).dp)) { CircularProgressIndicator() }
-            emptyList<T>() -> HCenterBox(modifier = Modifier
-                .padding(horizontal = 40.dp)
-                .background(BulkaPediaTheme.colors.primary, RoundedCornerShape(15.dp))
-                .height((25 * 2 + 75 * 3).dp)) { Text(resource = R.string.empty_sets) }
-            else -> HorizontalPager(state = pager) { pattern(content[it]) }
-        }
+                .height((25 * 2 + 75 * 3).dp)
+            ) { it() }
+        }) { items -> HorizontalPager(state = pager, pageSpacing = 20.dp) { pattern(items[it]) } }
     }
 }

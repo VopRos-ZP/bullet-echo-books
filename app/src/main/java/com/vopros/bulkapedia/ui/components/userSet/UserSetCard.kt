@@ -1,11 +1,14 @@
 package com.vopros.bulkapedia.ui.components.userSet
 
-import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -17,8 +20,6 @@ import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.HideImage
 import androidx.compose.material.icons.filled.Image
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.Icon
-import androidx.compose.material.IconToggleButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -33,8 +34,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.vopros.bulkapedia.ui.components.IconButton
 import com.vopros.bulkapedia.ui.components.Image
+import com.vopros.bulkapedia.ui.components.OutlinedIconButton
 import com.vopros.bulkapedia.ui.components.Text
 import com.vopros.bulkapedia.ui.components.cards.Card
+import com.vopros.bulkapedia.userSet.UserSet
 import com.vopros.bulkapedia.userSet.UserSetUseCase
 
 @Composable
@@ -47,34 +50,47 @@ fun UserSetCard(
     val viewModel: UserSetCardViewModel = hiltViewModel()
     LaunchedEffect(container.set) { viewModel.fetchConfig() }
     val config by viewModel.config.collectAsState()
-    UserSetCard(
-        gears = container.set.gears,
-        up = { AnimatedVisibility(expand && withHeroIcon) { Image(url = container.hero.image) } }
-    ) {
-        Text(title = container.user.nickname)
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Text(title = "${container.set.liked.size}")
-            IconButton(
-                onClick = { viewModel.like(container) },
-                tint = Color.Red,
-                icon = if (container.set.liked.contains(config?.first)) Icons.Default.Favorite
-                else Icons.Default.FavoriteBorder
-            )
-        }
-        Row {
-            IconButton(onClick = { /* settings click */ }, icon = Icons.Default.Settings)
-            IconButton(onClick = onCommentClick, icon = Icons.Default.Comment)
-            if (withHeroIcon) {
-                IconToggleButton(
-                    checked = expand,
-                    onCheckedChange = { expand = it },
-                ) {
-                    Icon(
-                        if (expand) Icons.Default.HideImage
-                        else Icons.Default.Image,
-                        contentDescription = null
-                    )
+    UserSetCard(container.set) {
+        Crossfade(
+            modifier = Modifier.fillMaxWidth().weight(1f),
+            targetState = expand, label = ""
+        ) {
+            when (it && withHeroIcon) {
+                true -> Box(modifier = Modifier.fillMaxSize()) {
+                    Image(url = container.hero.image, modifier = Modifier.fillMaxSize())
                 }
+                else -> Column(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.SpaceEvenly,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    Text(title = container.user.nickname)
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(title = "${container.set.liked.size}")
+                        IconButton(
+                            onClick = { viewModel.like(container) },
+                            tint = Color.Red,
+                            icon = if (container.set.liked.contains(config?.first)) Icons.Default.Favorite
+                            else Icons.Default.FavoriteBorder
+                        )
+                    }
+                }
+            }
+        }
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = when (withHeroIcon) {
+                true -> Arrangement.SpaceBetween
+                else -> Arrangement.SpaceEvenly
+            },
+        ) {
+            OutlinedIconButton(onClick = { /* settings click */ }, icon = Icons.Default.Settings)
+            OutlinedIconButton(onClick = onCommentClick, icon = Icons.Default.Comment)
+            if (withHeroIcon) {
+                OutlinedIconButton(
+                    onClick = { expand = !expand },
+                    icon = if (expand) Icons.Default.HideImage else Icons.Default.Image
+                )
             }
         }
     }
@@ -82,22 +98,21 @@ fun UserSetCard(
 
 @Composable
 fun UserSetCard(
-    gears: Map<String, String>,
-    up: @Composable () -> Unit = {},
+    userSet: UserSet,
     content: @Composable ColumnScope.() -> Unit
 ) {
     Card(radius = 15.dp) {
-        Column(modifier = Modifier.padding(15.dp)) {
-            up()
-            Row(horizontalArrangement = Arrangement.spacedBy(15.dp)) {
-                Gears(gears = gears)
-                Column(
-                    Modifier.height((75 * 3).dp),
-                    verticalArrangement = Arrangement.SpaceEvenly,
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    content = content
-                )
-            }
+        Row(
+            modifier = Modifier.padding(15.dp),
+            horizontalArrangement = Arrangement.spacedBy(15.dp)
+        ) {
+            Gears(gears = userSet.gears)
+            Column(
+                Modifier.height((75 * 3).dp),
+                verticalArrangement = Arrangement.SpaceEvenly,
+                horizontalAlignment = Alignment.CenterHorizontally,
+                content = content
+            )
         }
     }
 }
