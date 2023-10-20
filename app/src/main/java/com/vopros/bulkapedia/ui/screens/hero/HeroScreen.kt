@@ -102,7 +102,11 @@ fun HeroThumbnail(
     content: @Composable ColumnScope.() -> Unit
 ) {
     Card(modifier = Modifier.fillMaxWidth()) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
             Image(url = image, modifier = Modifier.size(150.dp))
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,

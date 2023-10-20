@@ -1,5 +1,6 @@
 package com.vopros.bulkapedia.ui.screens.createSet
 
+import com.vopros.bulkapedia.gears.Gear
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -28,13 +29,13 @@ class CreateSetViewModel @Inject constructor(
             dataStore.userId.collect { token ->
                 _useCase.emit(
                     UserSetUseCase(
-                    user = userRepository.fetchOne(token),
-                    hero = heroRepository.fetchOne(heroId),
-                    set = when (setId) {
-                        null -> UserSet("", token, emptyMap(), heroId, emptyList())
-                        else -> setRepository.fetchOne(setId)
-                    }
-                )
+                        user = userRepository.fetchOne(token),
+                        hero = heroRepository.fetchOne(heroId),
+                        set = when (setId) {
+                            null -> UserSet("", token, Gear.emptyGears, heroId, emptyList())
+                            else -> setRepository.fetchOne(setId)
+                        }
+                    )
                 )
             }
         }
@@ -42,6 +43,10 @@ class CreateSetViewModel @Inject constructor(
 
     fun saveSet(userSet: UserSet) {
         coroutine { setRepository.update(userSet) }
+    }
+
+    fun selectGear() {
+
     }
 
 }

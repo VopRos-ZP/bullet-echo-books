@@ -1,5 +1,7 @@
 package com.vopros.bulkapedia.ui.theme
 
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.staticCompositionLocalOf
@@ -16,6 +18,11 @@ val LocalNavController = compositionLocalOf<NavController> {
 
 val LocalTopBarViewModel = compositionLocalOf<TopBarViewModel> {
     error("TopBarViewModel doesn't provides")
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+val LocalBottomSheetState = compositionLocalOf<ModalBottomSheetState> {
+    error("ModalBottomSheetState doesn't provides")
 }
 
 val LocalSnackbar = compositionLocalOf<SnackbarHostState?> { null }

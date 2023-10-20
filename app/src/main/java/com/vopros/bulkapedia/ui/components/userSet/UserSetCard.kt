@@ -1,6 +1,8 @@
 package com.vopros.bulkapedia.ui.components.userSet
 
 import androidx.compose.animation.Crossfade
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -13,6 +15,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Comment
 import androidx.compose.material.icons.filled.Favorite
@@ -37,6 +40,7 @@ import com.vopros.bulkapedia.ui.components.Image
 import com.vopros.bulkapedia.ui.components.OutlinedIconButton
 import com.vopros.bulkapedia.ui.components.Text
 import com.vopros.bulkapedia.ui.components.cards.Card
+import com.vopros.bulkapedia.ui.theme.BulkaPediaTheme
 import com.vopros.bulkapedia.userSet.UserSet
 import com.vopros.bulkapedia.userSet.UserSetUseCase
 
@@ -108,7 +112,7 @@ fun UserSetCard(
         ) {
             Gears(gears = userSet.gears)
             Column(
-                Modifier.height((75 * 3).dp),
+                Modifier.height((75 * 3).dp + 20.dp),
                 verticalArrangement = Arrangement.SpaceEvenly,
                 horizontalAlignment = Alignment.CenterHorizontally,
                 content = content
@@ -118,23 +122,32 @@ fun UserSetCard(
 }
 
 @Composable
-fun Gears(gears: Map<String, String>, onClick: (String) -> Unit = {}) {
-    Column(modifier = Modifier.height((75 * 3).dp)) {
-        GearRow(gears = listOf(gears["head"]!!, gears["body"]!!), onClick)
-        GearRow(gears = listOf(gears["arm"]!!, gears["leg"]!!), onClick)
-        GearRow(gears = listOf(gears["decor"]!!, gears["device"]!!), onClick)
+fun Gears(gears: Map<String, String>, modifier: Modifier = Modifier, onClick: (String) -> Unit = {}) {
+    Column(
+        modifier = modifier.height((75 * 3).dp + 30.dp),
+        verticalArrangement = Arrangement.spacedBy(10.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        GearRow(gears = gears, listOf("head", "body"), onClick)
+        GearRow(gears = gears, listOf("arm", "leg"), onClick)
+        GearRow(gears = gears, listOf("decor", "device"), onClick)
     }
 }
 
 @Composable
-private fun GearRow(gears: List<String>, onClick: (String) -> Unit) {
-    Row(modifier = Modifier.width((75 * 2).dp)) {
-        gears.map { value ->
+private fun GearRow(gears: Map<String, String>, keys: List<String>, onClick: (String) -> Unit) {
+    Row(
+        modifier = Modifier.width((75 * 2).dp + 10.dp),
+        horizontalArrangement = Arrangement.spacedBy(10.dp)
+    ) {
+        gears.filter { keys.contains(it.key) }.map { (key, value) ->
             Image(
                 url = value,
                 modifier = Modifier
                     .size(75.dp)
-                    .clickable { onClick(value) }
+                    .background(BulkaPediaTheme.colors.primaryDark, RoundedCornerShape(15.dp))
+                    .border(2.dp, BulkaPediaTheme.colors.tintColor, RoundedCornerShape(15.dp))
+                    .clickable { onClick(key) }
             )
         }
     }
