@@ -10,6 +10,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
 import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.navigation.dependency
+import com.vopros.bulkapedia.ui.components.bottomNavigation.BottomNavigation
 import com.vopros.bulkapedia.ui.components.topbar.TopBar
 import com.vopros.bulkapedia.ui.screens.NavGraphs
 import com.vopros.bulkapedia.ui.screens.categories.CategoriesViewModel
