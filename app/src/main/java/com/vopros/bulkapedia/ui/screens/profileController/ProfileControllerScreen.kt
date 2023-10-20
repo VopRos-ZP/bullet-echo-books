@@ -14,8 +14,8 @@ import com.vopros.bulkapedia.ui.screens.destinations.ProfileScreenDestination
 @Destination
 @Composable
 fun ProfileControllerScreen(navigator: DestinationsNavigator, viewModel: ProfileControllerViewModel) {
-    val config by viewModel.config.collectAsState()
     LaunchedEffect(null) { viewModel.fetchConfig() }
+    val config by viewModel.config.collectAsState()
     LaunchedEffect(config) {
         when (config.second) {
             true -> navigator.navigate(ProfileScreenDestination(config.first))
