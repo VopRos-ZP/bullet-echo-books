@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import com.vopros.bulkapedia.core.Callback
 import com.vopros.bulkapedia.hero.Hero
 import com.vopros.bulkapedia.hero.HeroRepository
+import com.vopros.bulkapedia.storage.DataStore
 import com.vopros.bulkapedia.ui.view.ErrViewModel
 import com.vopros.bulkapedia.user.UserRepository
 import com.vopros.bulkapedia.userSet.SetRepository
@@ -14,6 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HeroViewModel @Inject constructor(
+    private val dataStore: DataStore,
     private val heroRepository: HeroRepository,
     private val setRepository: SetRepository,
     private val userRepository: UserRepository
@@ -24,6 +26,9 @@ class HeroViewModel @Inject constructor(
 
     private val _sets = MutableStateFlow<List<UserSetUseCase>?>(null)
     val sets = _sets.asStateFlow()
+
+    private val _config = MutableStateFlow(Pair("", false))
+    val config = _config.asStateFlow()
 
     fun fetch(heroId: String) {
         listeners["hero"] = heroRepository.listenOne(heroId, Callback(::error) {
@@ -42,6 +47,7 @@ class HeroViewModel @Inject constructor(
                 _sets.emit(top3)
             }
         })
+        coroutine { dataStore.config.collect { _config.emit(it) } }
     }
 
 }

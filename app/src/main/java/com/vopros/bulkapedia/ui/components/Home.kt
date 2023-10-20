@@ -3,8 +3,10 @@ package com.vopros.bulkapedia.ui.components
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
+import androidx.compose.material.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
@@ -25,7 +27,6 @@ import com.vopros.bulkapedia.ui.screens.destinations.HeroesScreenDestination
 import com.vopros.bulkapedia.ui.screens.destinations.LoginScreenDestination
 import com.vopros.bulkapedia.ui.screens.destinations.MapScreenDestination
 import com.vopros.bulkapedia.ui.screens.destinations.MapsScreenDestination
-import com.vopros.bulkapedia.ui.screens.destinations.ProfileControllerScreenDestination
 import com.vopros.bulkapedia.ui.screens.destinations.ProfileScreenDestination
 import com.vopros.bulkapedia.ui.screens.destinations.RegistrationScreenDestination
 import com.vopros.bulkapedia.ui.screens.destinations.SettingsScreenDestination
@@ -36,23 +37,26 @@ import com.vopros.bulkapedia.ui.screens.login.LoginViewModel
 import com.vopros.bulkapedia.ui.screens.map.MapViewModel
 import com.vopros.bulkapedia.ui.screens.maps.MapsViewModel
 import com.vopros.bulkapedia.ui.screens.profile.ProfileViewModel
-import com.vopros.bulkapedia.ui.screens.profileController.ProfileControllerViewModel
 import com.vopros.bulkapedia.ui.screens.registration.RegistrationViewModel
 import com.vopros.bulkapedia.ui.screens.settings.SettingsViewModel
 import com.vopros.bulkapedia.ui.theme.LocalNavController
+import com.vopros.bulkapedia.ui.theme.LocalSnackbar
 import com.vopros.bulkapedia.ui.theme.LocalTopBarViewModel
 
 @Composable
 fun Home() {
     val navController = rememberNavController()
+    val snackbarHostState = remember { SnackbarHostState() }
     CompositionLocalProvider(
         LocalTopBarViewModel provides hiltViewModel(),
-        LocalNavController provides navController
+        LocalNavController provides navController,
+        LocalSnackbar provides snackbarHostState
     ) {
         Scaffold(
             modifier = Modifier.fillMaxSize(),
             topBar = { TopBar() },
             bottomBar = { BottomNavigation(navController) },
+            snackbarHost = { TextSnackbar(snackbarHostState) }
         ) {
             DestinationsNavHost(
                 navGraph = NavGraphs.root,
@@ -61,7 +65,6 @@ fun Home() {
                 dependenciesContainerBuilder = {
                     /* Root */
                     dependency(CategoriesScreenDestination) { hiltViewModel<CategoriesViewModel>() }
-                    dependency(ProfileControllerScreenDestination) { hiltViewModel<ProfileControllerViewModel>() }
                     /* Heroes */
                     dependency(HeroesScreenDestination) { hiltViewModel<HeroesViewModel>() }
                     dependency(HeroScreenDestination) { hiltViewModel<HeroViewModel>() }

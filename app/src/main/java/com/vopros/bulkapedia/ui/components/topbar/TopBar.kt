@@ -11,9 +11,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
+import com.ramcosta.composedestinations.navigation.navigate
 import com.vopros.bulkapedia.R
 import com.vopros.bulkapedia.ui.components.IconButton
 import com.vopros.bulkapedia.ui.components.Text
+import com.vopros.bulkapedia.ui.screens.destinations.SettingsScreenDestination
 import com.vopros.bulkapedia.ui.theme.BulkaPediaTheme
 import com.vopros.bulkapedia.ui.theme.BulkapediaTheme
 import com.vopros.bulkapedia.ui.theme.LocalTopBarViewModel
@@ -53,8 +55,10 @@ fun TopBar(title: String, showBack: Boolean, controller: NavController?) {
             }
         },
         actions = {
-            IconButton(onClick = {
-            }, icon = Icons.Filled.Settings)
+            IconButton(
+                onClick = { controller?.navigate(SettingsScreenDestination()) },
+                icon = Icons.Filled.Settings
+            )
         }
     )
 }

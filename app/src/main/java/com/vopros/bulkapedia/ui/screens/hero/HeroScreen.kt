@@ -13,8 +13,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -30,7 +32,9 @@ import com.vopros.bulkapedia.ui.components.tab.TabRowWithPager
 import com.vopros.bulkapedia.ui.components.userSet.UserSetCard
 import com.vopros.bulkapedia.ui.screens.destinations.CommentsScreenDestination
 import com.vopros.bulkapedia.ui.screens.destinations.CreateSetScreenDestination
+import com.vopros.bulkapedia.ui.theme.LocalSnackbar
 import com.vopros.bulkapedia.utils.resourceManager
+import kotlinx.coroutines.launch
 
 @Destination
 @Composable
@@ -41,6 +45,10 @@ fun HeroScreen(
 ) {
     val hero by viewModel.hero.collectAsState()
     val sets by viewModel.sets.collectAsState()
+    val config by viewModel.config.collectAsState()
+    val snackbar = LocalSnackbar.current
+    val scope = rememberCoroutineScope()
+    val loginMessageText = stringResource(R.string.need_login_for_use_it)
     ScreenView(
         title = resourceManager.toSource(heroId),
         showBack = true,
@@ -73,7 +81,13 @@ fun HeroScreen(
                     /* Add user set Button */
                     item {
                         OutlinedButton(onClick = {
-                            navigator.navigate(CreateSetScreenDestination(heroId, null))
+                            if (config.second) {
+                                navigator.navigate(CreateSetScreenDestination(heroId, null))
+                            } else {
+                                scope.launch {
+                                    snackbar?.showSnackbar(loginMessageText)
+                                }
+                            }
                         }, text = R.string.create_set)
                     }
                 }
