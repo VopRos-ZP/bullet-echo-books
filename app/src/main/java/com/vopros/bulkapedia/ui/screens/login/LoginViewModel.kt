@@ -22,6 +22,7 @@ class LoginViewModel @Inject constructor(
             authRepository.login(email, password, ::error) {
                 coroutine { dataStore.saveData(it.id, true) }
             }
+            dataStore.config.collect { _config.emit(it) }
         }
     }
 
