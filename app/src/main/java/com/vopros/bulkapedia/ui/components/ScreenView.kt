@@ -47,15 +47,15 @@ inline fun <reified V: ErrViewModel> ScreenView(
     val navController = LocalNavController.current
     topBarViewModel.update(title, showBack, navController)
 
+    DisposableEffect(key) {
+        fetch(viewModel)
+        onDispose { viewModel.onDispose() }
+    }
     val error by viewModel.error.collectAsState()
     CenterBox(modifier = Modifier.background(BulkaPediaTheme.colors.primaryDark)) {
         AnimatedVisibility(visible = error.isNotEmpty()) {
             Error(message = error, onClose = viewModel::closeError)
         }
         content()
-    }
-    DisposableEffect(key) {
-        fetch(viewModel)
-        onDispose { viewModel.onDispose() }
     }
 }
