@@ -35,6 +35,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.vopros.bulkapedia.gears.GearCell
 import com.vopros.bulkapedia.ui.components.IconButton
 import com.vopros.bulkapedia.ui.components.Image
 import com.vopros.bulkapedia.ui.components.OutlinedIconButton
@@ -56,7 +57,9 @@ fun UserSetCard(
     val config by viewModel.config.collectAsState()
     UserSetCard(container.set) {
         Crossfade(
-            modifier = Modifier.fillMaxWidth().weight(1f),
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f),
             targetState = expand, label = ""
         ) {
             when (it && withHeroIcon) {
@@ -122,33 +125,38 @@ fun UserSetCard(
 }
 
 @Composable
-fun Gears(gears: Map<String, String>, modifier: Modifier = Modifier, onClick: (String) -> Unit = {}) {
+fun Gears(gears: Map<GearCell, String>, modifier: Modifier = Modifier, onClick: (GearCell) -> Unit = {}) {
     Column(
         modifier = modifier.height((75 * 3).dp + 30.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        GearRow(gears = gears, listOf("head", "body"), onClick)
-        GearRow(gears = gears, listOf("arm", "leg"), onClick)
-        GearRow(gears = gears, listOf("decor", "device"), onClick)
+        GearRow(gears = gears, listOf(GearCell.HEAD, GearCell.BODY), onClick)
+        GearRow(gears = gears, listOf(GearCell.ARM, GearCell.LEG), onClick)
+        GearRow(gears = gears, listOf(GearCell.DECOR, GearCell.DEVICE), onClick)
     }
 }
 
 @Composable
-private fun GearRow(gears: Map<String, String>, keys: List<String>, onClick: (String) -> Unit) {
+private fun GearRow(gears: Map<GearCell, String>, keys: List<GearCell>, onClick: (GearCell) -> Unit) {
     Row(
         modifier = Modifier.width((75 * 2).dp + 10.dp),
         horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         gears.filter { keys.contains(it.key) }.map { (key, value) ->
-            Image(
-                url = value,
-                modifier = Modifier
-                    .size(75.dp)
-                    .background(BulkaPediaTheme.colors.primaryDark, RoundedCornerShape(15.dp))
-                    .border(2.dp, BulkaPediaTheme.colors.tintColor, RoundedCornerShape(15.dp))
-                    .clickable { onClick(key) }
-            )
+            GearImage(url = value) { onClick(key) }
         }
     }
+}
+
+@Composable
+fun GearImage(url: String, onClick: () -> Unit = {}) {
+    Image(
+        url = url,
+        modifier = Modifier
+            .size(75.dp)
+            .background(BulkaPediaTheme.colors.primaryDark, RoundedCornerShape(15.dp))
+            .border(2.dp, BulkaPediaTheme.colors.tintColor, RoundedCornerShape(15.dp))
+            .clickable { onClick() }
+    )
 }

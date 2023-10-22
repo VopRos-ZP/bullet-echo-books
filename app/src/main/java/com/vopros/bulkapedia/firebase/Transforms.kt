@@ -7,9 +7,12 @@ import com.vopros.bulkapedia.category.CategoryDTO
 import com.vopros.bulkapedia.comment.Comment
 import com.vopros.bulkapedia.comment.CommentDTO
 import com.vopros.bulkapedia.gears.Gear
+import com.vopros.bulkapedia.gears.GearCell
 import com.vopros.bulkapedia.gears.GearDTO
+import com.vopros.bulkapedia.gears.GearSet
 import com.vopros.bulkapedia.hero.Hero
 import com.vopros.bulkapedia.hero.HeroDTO
+import com.vopros.bulkapedia.hero.HeroType
 import com.vopros.bulkapedia.map.GameMap
 import com.vopros.bulkapedia.map.GameMapDTO
 import com.vopros.bulkapedia.user.User
@@ -22,14 +25,12 @@ import com.vopros.bulkapedia.userSet.UserSetDTO
  *
  * **/
 inline fun <reified T, D> toObject(dto: Class<D>, doc: DocumentSnapshot, toPojo: (D) -> T?): T? {
-    if (dto == CommentDTO::class.java) {
-        Log.d("ToObject", "${doc["author"]} ${doc.toObject(dto)}")
-    }
     return toPojo(doc.toObject(dto)!!)
 }
 
 fun toHero(doc: DocumentSnapshot): Hero? = toObject(HeroDTO::class.java, doc) {
-    Hero(it.id, it.active, it.difficult, it.image, it.type, it.counterpicks, it.stats)
+    Log.d("toHero", "$it")
+    Hero(it.id, it.active, it.difficult, it.image, HeroType.valueOf(it.type), it.counterpicks, it.stats, it.personalGears)
 }
 
 fun toCategory(doc: DocumentSnapshot): Category? = toObject(CategoryDTO::class.java, doc) {
@@ -41,7 +42,7 @@ fun toGameMap(doc: DocumentSnapshot): GameMap? = toObject(GameMapDTO::class.java
 }
 
 fun toUserSet(doc: DocumentSnapshot): UserSet? = toObject(UserSetDTO::class.java, doc) {
-    UserSet(it.documentId, it.author, it.gears, it.hero, it.liked)
+    UserSet(it.documentId, it.author, it.gears.mapKeys { (k, _) -> GearCell.valueOf(k.uppercase()) }, it.hero, it.liked)
 }
 
 fun toUser(doc: DocumentSnapshot): User? = toObject(UserDTO::class.java, doc) {
@@ -53,5 +54,5 @@ fun toComment(doc: DocumentSnapshot): Comment? = toObject(CommentDTO::class.java
 }
 
 fun toGear(doc: DocumentSnapshot): Gear? = toObject(GearDTO::class.java, doc) {
-    Gear(it.id, it.gearCell, it.gearSet, it.image)
+    Gear(it.id, GearCell.valueOf(it.gearCell.uppercase()), GearSet.valueOf(it.gearSet), it.icon)
 }

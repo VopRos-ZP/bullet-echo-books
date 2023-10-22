@@ -17,6 +17,7 @@
     <string name="hide_spawns">Hide spawns</string>
     <!--   найстройки -->
     <string name="settings_text">Text</string>
+    <string name="close">Close</string>
     <string name="profile">Profile</string>
     <string name="account">Account</string>
     <string name="your_sets">Your sets</string>

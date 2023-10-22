@@ -16,6 +16,7 @@
     <string name="hide_spawns">Скрыть точки появления</string>
     <!--   найстройки -->
     <string name="settings_text">Текст</string>
+    <string name="close">Закрыть</string>
     <string name="settings">Настройки</string>
     <string name="your_sets">Ваши сеты</string>
     <string name="profile">Профиль</string>

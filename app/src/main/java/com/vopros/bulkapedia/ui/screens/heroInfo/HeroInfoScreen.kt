@@ -13,6 +13,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.vopros.bulkapedia.R
 import com.vopros.bulkapedia.hero.Hero
+import com.vopros.bulkapedia.hero.HeroType
 import com.vopros.bulkapedia.ui.components.Difficult
 import com.vopros.bulkapedia.ui.components.ScreenView
 import com.vopros.bulkapedia.ui.components.Text
@@ -43,9 +44,10 @@ val hero = Hero(
     active = true,
     difficult = "easy",
     image = "https://firebasestorage.googleapis.com/v0/b/bulkapedia-66ef5.appspot.com/o/heroes%2Fshortguns%2Farnie.png?alt=media&token=9613b763-7d39-4262-a93c-f272783d55fd",
-    type = "shortguns",
+    type = HeroType.SHORTGUN,
     counterpicks = emptyList(),
-    stats = emptyMap()
+    stats = emptyMap(),
+    personalGears = emptyList()
 )
 
 @Preview

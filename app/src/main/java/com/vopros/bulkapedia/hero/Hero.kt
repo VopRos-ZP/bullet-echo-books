@@ -7,18 +7,20 @@ data class Hero(
     val active: Boolean,
     val difficult: String,
     val image: String,
-    val type: String,
+    val type: HeroType,
     val counterpicks: List<String>,
-    val stats: Map<String, Double>
+    val stats: Map<String, Double>,
+    val personalGears: List<String>
 ): Entity(id) {
 
     override fun toData(): Map<String, Any> = mapOf(
         "active" to active,
         "difficult" to difficult,
         "image" to image,
-        "type" to type,
+        "type" to type.name.lowercase(),
         "counterpicks" to counterpicks,
         "stats" to stats,
+        "personalGears" to personalGears
     )
 
     companion object {
@@ -28,9 +30,10 @@ data class Hero(
             active = true,
             difficult = "",
             image = "",
-            type = "",
+            type = HeroType.SHORTGUN,
             counterpicks = emptyList(),
-            stats = emptyMap()
+            stats = emptyMap(),
+            personalGears = emptyList()
         )
 
     }

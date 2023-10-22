@@ -7,5 +7,5 @@ import com.vopros.bulkapedia.firebase.toGear
 import javax.inject.Inject
 
 class GearRepository @Inject constructor(): FirebaseImpl<Gear>(
-    Firebase.firestore.collection(""), ::toGear
+    Firebase.firestore.collection("gears"), ::toGear
 )

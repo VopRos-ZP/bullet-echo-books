@@ -9,5 +9,6 @@ data class HeroDTO(
     var image: String = "",
     var type: String = "",
     var counterpicks: List<String> = emptyList(),
-    var stats: Map<String, Double> = emptyMap()
+    var stats: Map<String, Double> = emptyMap(),
+    var personalGears: List<String> = emptyList()
 )

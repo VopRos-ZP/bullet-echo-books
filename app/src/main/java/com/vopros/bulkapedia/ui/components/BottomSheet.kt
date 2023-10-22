@@ -1,5 +1,6 @@
 package com.vopros.bulkapedia.ui.components
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,6 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.vopros.bulkapedia.R
 import com.vopros.bulkapedia.ui.components.button.OutlinedButton
+import com.vopros.bulkapedia.ui.theme.BulkaPediaTheme
 import com.vopros.bulkapedia.ui.theme.LocalBottomSheetState
 import kotlinx.coroutines.launch
 
@@ -43,17 +45,18 @@ fun BottomSheet(
             modifier = Modifier.fillMaxSize(),
             sheetState = sheetState,
             sheetShape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp),
+            sheetBackgroundColor = BulkaPediaTheme.colors.primaryDark,
             sheetContent = {
                 HCenterBox {
                     Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(10.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
+                        modifier = Modifier.fillMaxWidth().padding(top = 20.dp, start = 20.dp, end = 20.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(10.dp)
                     ) {
                         OutlinedButton(
+                            modifier = Modifier.fillMaxWidth(),
                             onClick = { scope.launch { sheetState.hide() }; onClose() },
-                            text = R.string.factory,
+                            text = R.string.close,
                             color = Color.Red
                         )
                         sheetContent()
