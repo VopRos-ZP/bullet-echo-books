@@ -6,6 +6,8 @@ import com.vopros.bulkapedia.category.Category
 import com.vopros.bulkapedia.category.CategoryDTO
 import com.vopros.bulkapedia.comment.Comment
 import com.vopros.bulkapedia.comment.CommentDTO
+import com.vopros.bulkapedia.effect.Effect
+import com.vopros.bulkapedia.effect.EffectDTO
 import com.vopros.bulkapedia.gears.Gear
 import com.vopros.bulkapedia.gears.GearCell
 import com.vopros.bulkapedia.gears.GearDTO
@@ -55,4 +57,8 @@ fun toComment(doc: DocumentSnapshot): Comment? = toObject(CommentDTO::class.java
 
 fun toGear(doc: DocumentSnapshot): Gear? = toObject(GearDTO::class.java, doc) {
     Gear(it.id, GearCell.valueOf(it.gearCell.uppercase()), GearSet.valueOf(it.gearSet), it.icon)
+}
+
+fun toEffect(doc: DocumentSnapshot): Effect? = toObject(EffectDTO::class.java, doc) {
+    Effect(it.id, it.number, it.percent, it.description)
 }
