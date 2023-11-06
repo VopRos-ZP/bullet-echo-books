@@ -7,11 +7,11 @@ import com.vopros.bulkapedia.category.CategoryDTO
 import com.vopros.bulkapedia.comment.Comment
 import com.vopros.bulkapedia.comment.CommentDTO
 import com.vopros.bulkapedia.effect.Effect
-import com.vopros.bulkapedia.effect.EffectDTO
 import com.vopros.bulkapedia.gears.Gear
 import com.vopros.bulkapedia.gears.GearCell
 import com.vopros.bulkapedia.gears.GearDTO
 import com.vopros.bulkapedia.gears.GearSet
+import com.vopros.bulkapedia.gears.Rank
 import com.vopros.bulkapedia.hero.Hero
 import com.vopros.bulkapedia.hero.HeroDTO
 import com.vopros.bulkapedia.hero.HeroType
@@ -31,7 +31,6 @@ inline fun <reified T, D> toObject(dto: Class<D>, doc: DocumentSnapshot, toPojo:
 }
 
 fun toHero(doc: DocumentSnapshot): Hero? = toObject(HeroDTO::class.java, doc) {
-    Log.d("toHero", "$it")
     Hero(it.id, it.active, it.difficult, it.image, HeroType.valueOf(it.type), it.counterpicks, it.stats, it.personalGears)
 }
 
@@ -56,9 +55,19 @@ fun toComment(doc: DocumentSnapshot): Comment? = toObject(CommentDTO::class.java
 }
 
 fun toGear(doc: DocumentSnapshot): Gear? = toObject(GearDTO::class.java, doc) {
-    Gear(it.id, GearCell.valueOf(it.gearCell.uppercase()), GearSet.valueOf(it.gearSet), it.icon)
+    Gear(it.id, GearCell.valueOf(it.gearCell.uppercase()), GearSet.valueOf(it.gearSet), it.icon, it.effects, it.ranks)
 }
 
-fun toEffect(doc: DocumentSnapshot): Effect? = toObject(EffectDTO::class.java, doc) {
-    Effect(it.id, it.number, it.percent, it.description)
+
+
+fun Gear.getEffects(): List<Effect> {
+    return effects.values.toList()
+}
+
+fun Gear.getRankEffects(): Map<Rank, List<Effect>> {
+    return Rank.values().mapIndexed { i, rank ->
+        rank to getEffects().mapIndexed { ei, it ->
+            Effect(ranks["$ei"]!![i], it.percent, it.description)
+        }
+    }.toMap()
 }

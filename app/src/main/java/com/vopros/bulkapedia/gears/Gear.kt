@@ -1,18 +1,23 @@
 package com.vopros.bulkapedia.gears
 
 import com.vopros.bulkapedia.core.Entity
+import com.vopros.bulkapedia.effect.Effect
 
 data class Gear(
     override val id: String,
     val gearCell: GearCell,
     val gearSet: GearSet,
-    val image: String
+    val image: String,
+    val effects: Map<String, Effect>,
+    val ranks: Map<String, List<Int>>
 ): Entity(id) {
 
     override fun toData(): Map<String, Any> = mapOf(
         "gearCell" to gearCell.name.lowercase(),
         "gearSet" to gearSet.name.lowercase(),
-        "image" to image
+        "image" to image,
+        "effects" to effects,
+        "ranks" to ranks
     )
 
     companion object {

@@ -17,6 +17,7 @@ dagger = "2.48"
 lifecycle-runtime-ktx = "2.6.2"
 navigation-compose = "2.7.4"
 coil = "2.4.0"
+appwrite = "4.0.0"
 
 [libraries]
 activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activity-compose" }
@@ -34,6 +35,7 @@ ksp = { module = "io.github.raamcosta.compose-destinations:ksp", version.ref = "
 lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle-runtime-ktx" }
 navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigation-compose" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
+appwrite = { module = "io.appwrite:sdk-for-android", version.ref = "appwrite" }
 
 [plugins]
 application = { id = "com.android.application", version.ref = "agp" }

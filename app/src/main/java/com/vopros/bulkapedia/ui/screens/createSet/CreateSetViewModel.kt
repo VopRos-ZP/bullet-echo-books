@@ -1,6 +1,7 @@
 package com.vopros.bulkapedia.ui.screens.createSet
 
 import com.vopros.bulkapedia.core.Callback
+import com.vopros.bulkapedia.effect.Effect
 import com.vopros.bulkapedia.gears.Gear
 import com.vopros.bulkapedia.gears.GearCell
 import com.vopros.bulkapedia.gears.GearRepository
@@ -47,6 +48,15 @@ class CreateSetViewModel @Inject constructor(
                     )
                 )
             }
+        }
+    }
+
+    fun selectGear(gear: Gear, effs: List<Effect>) {
+        coroutine {
+            val set = useCase.value!!.set
+            val mutableGears = set.gears.toMutableMap()
+            mutableGears[gear.gearCell] = gear.image
+            _useCase.emit(useCase.value?.copy(set = set.copy(gears = mutableGears)))
         }
     }
 

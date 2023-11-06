@@ -67,6 +67,8 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics-ktx")
     implementation("com.google.firebase:firebase-firestore-ktx")
     implementation("com.google.firebase:firebase-auth-ktx")
+    /** Appwrite **/
+    implementation(libs.appwrite)
     /** DataStore **/
     implementation(libs.datastore.preferences)
     /** Core **/
